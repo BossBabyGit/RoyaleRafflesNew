@@ -481,6 +481,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   const topUpBtn = $('#topUpBtn');
+  const topUpMsg = $('#topUpMessage');
   if (topUpBtn) {
     topUpBtn.addEventListener('click', () => {
       const amt = parseFloat($('#topUpAmount').value);
@@ -488,6 +489,11 @@ document.addEventListener('DOMContentLoaded', () => {
         setBalance(getBalance() + amt);
         $('#topUpAmount').value = '';
         renderProfile();
+        if (topUpMsg) {
+          topUpMsg.textContent = `Added £${amt.toFixed(2)} to balance.`;
+          topUpMsg.classList.add('show');
+          setTimeout(() => topUpMsg.classList.remove('show'), 2000);
+        }
       }
     });
   }
