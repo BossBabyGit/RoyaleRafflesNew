@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Royal Raffles UK — Win Amazing Prizes!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700&family=Kanit:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <nav class="nav">
+      <div class="logo">
+        <span class="crown">👑</span>
+        Royal Raffles UK
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#" class="nav-link active" data-page="home">Home</a></li>
+        <li><a href="#" class="nav-link" data-page="raffles">All Raffles</a></li>
+        <li><a href="#" class="nav-link" data-page="big-raffles">Big Raffles</a></li>
+        <li><a href="#" class="nav-link" data-page="winners">Past Winners</a></li>
+        <li><a href="#" class="nav-link" data-page="faq">FAQ</a></li>
+        <li>
+          <a id="loginLink" class="button button-outline" href="login.html">Login</a>
+        </li>
+      </ul>
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle light mode">🌙</button>
+      <div class="mobile-menu" id="mobileMenu">
+        <span></span><span></span><span></span>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="container">
+
+      <!-- Home -->
+      <section id="home" class="page active">
+
+        <!-- HERO -->
+        <section class="hero">
+          <div class="hero-content">
+            <div class="hero-badge">🏆 UK's Most Trusted Raffle Platform</div>
+            <h1>Win <span class="highlight">Luxury Prizes</span> from £2</h1>
+            <p>Join thousands of winners. Cars, tech, cash & more — your dream prize is just a ticket away.</p>
+
+            <div class="hero-stats">
+              <div class="stat">
+                <span class="stat-number">£2M+</span>
+                <span class="stat-label">Prizes Won</span>
+              </div>
+              <div class="stat">
+                <span class="stat-number">15K+</span>
+                <span class="stat-label">Winners</span>
+              </div>
+              <div class="stat">
+                <span class="stat-number">100%</span>
+                <span class="stat-label">Provably Fair</span>
+              </div>
+            </div>
+
+            <div class="hero-buttons">
+              <a class="button button-primary" href="#" data-go="raffles">Browse All</a>
+              <a class="button button-ghost" href="#" data-go="how-it-works">How It Works</a>
+            </div>
+          </div>
+
+          <div class="hero-visual">
+            <div class="orbit">
+              <div class="glow-dot"></div>
+              <div class="glow-dot delay1"></div>
+              <div class="glow-dot delay2"></div>
+            </div>
+            <img src="images/luxury.png" alt="Luxury prizes" class="hero-image"/>
+            <div class="confetti"></div>
+          </div>
+        </section>
+
+        <!-- TOP 3 -->
+        <section class="section">
+          <div class="section-head">
+            <h2>Top Raffles</h2>
+            <div class="section-actions">
+              <button class="chip is-active" data-top="popular">Popular</button>
+              <button class="chip" data-top="ending">Ending Soon</button>
+            </div>
+          </div>
+          <div class="raffles-grid" id="topRafflesGrid"></div>
+
+          <div class="center mt-lg">
+            <a class="button button-gradient" href="#" data-go="big-raffles">See Big Raffles</a>
+          </div>
+        </section>
+
+        <!-- HOW IT WORKS (quick explainer) -->
+        <section id="how-it-works" class="how-it-works">
+          <h2>How the raffles work</h2>
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <h3>Pick a raffle</h3>
+              <p>Choose any live raffle and select your number of tickets.</p>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <h3>Ticket limits</h3>
+              <p>Each user can buy up to <strong>50% of total tickets</strong> for a raffle — keeping things fair.</p>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <h3>Fair draws</h3>
+              <p>When the timer ends or tickets sell out, a winner is auto-drawn using a <strong>random.org</strong> bot and verified.</p>
+            </div>
+          </div>
+        </section>
+
+      </section>
+    </div>
+  </main>
+
+  <!-- Entry Modal -->
+  <div id="entryModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Enter Raffle</h2>
+        <button class="close-modal" data-close>×</button>
+      </div>
+      <div id="modalRaffleInfo">
+        <img id="modalImage" src="" alt="" class="modal-image">
+        <p id="modalDescription"></p>
+      </div>
+
+      <div class="ticket-selector">
+        <label>Tickets</label>
+        <button class="ticket-btn" data-delta="-1">-</button>
+        <input type="number" id="ticketCount" class="ticket-input" value="1" min="1" max="10">
+        <button class="ticket-btn" data-delta="1">+</button>
+      </div>
+
+      <div class="rule-hint" id="maxHint"></div>
+
+      <div class="total-cost">Total: £<span id="totalCost">2.00</span></div>
+
+      <div class="payment-methods">
+        <button class="payment-btn" data-pay="card">Card</button>
+        <button class="payment-btn" data-pay="paypal">PayPal</button>
+      </div>
+
+      <button class="button button-gradient button-lg" id="completeEntry">Complete Entry</button>
+      <div class="muted mt-sm center">A free-entry method is available. See T&Cs.</div>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div id="drawModal" class="modal">
+    <div class="modal-content">
+      <div class="success-message">
+        <div class="checkmark">✓</div>
+        <h2>Entry Successful!</h2>
+        <p>You're in the draw. Good luck! 🍀</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 Royal Raffles UK. All rights reserved. | Licensed & Regulated | 18+ Only</p>
+      <p>
+        <a href="#">Terms & Conditions</a> |
+        <a href="#">Privacy Policy</a> |
+        <a href="#">Responsible Gaming</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
