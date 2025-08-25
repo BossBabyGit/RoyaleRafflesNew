@@ -23,10 +23,8 @@
         <li><a href="#" class="nav-link" data-page="big-raffles">Big Raffles</a></li>
         <li><a href="#" class="nav-link" data-page="winners">Past Winners</a></li>
         <li><a href="#" class="nav-link" data-page="faq">FAQ</a></li>
-        <li id="accountNav" style="display:none;"><a href="#" class="nav-link" data-page="account">My Account</a></li>
-        <li>
-          <a id="loginLink" class="button button-outline" href="login.html">Login</a>
-        </li>
+        <li><button id="profileBtn" class="button button-outline" style="display:none;">Profile</button></li>
+        <li><a id="loginLink" class="button button-outline" href="login.html">Login</a></li>
       </ul>
       <button id="themeToggle" class="theme-toggle" aria-label="Toggle light mode">🌙</button>
       <div class="mobile-menu" id="mobileMenu">
@@ -121,22 +119,6 @@
 
       </section>
 
-      <section id="account" class="page">
-        <h2>My Account</h2>
-        <p>Balance: £<span id="userBalance">0.00</span></p>
-
-        <h3>Current Entries</h3>
-        <ul id="userCurrentEntries"></ul>
-
-        <h3>Past Raffles</h3>
-        <ul id="userPastRaffles"></ul>
-
-        <h3>Won Raffles</h3>
-        <ul id="userWonRaffles"></ul>
-
-        <h3>Stats</h3>
-        <p>Spent: £<span id="userSpent">0.00</span> | Won: £<span id="userWon">0.00</span></p>
-      </section>
     </div>
   </main>
 
@@ -181,6 +163,25 @@
         <h2>Entry Successful!</h2>
         <p>You're in the draw. Good luck! 🍀</p>
       </div>
+    </div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div id="profileModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>My Profile</h2>
+        <button class="close-modal" data-close>×</button>
+      </div>
+      <p>Balance: £<span id="modalBalance">0.00</span></p>
+      <h3>Current Entries</h3>
+      <div id="modalCurrentEntries" class="profile-grid"></div>
+      <h3>Past Raffles</h3>
+      <div id="modalPastRaffles" class="profile-grid"></div>
+      <h3>Won Raffles</h3>
+      <div id="modalWonRaffles" class="profile-grid"></div>
+      <h3>Stats</h3>
+      <p>Spent: £<span id="modalSpent">0.00</span> | Won: £<span id="modalWon">0.00</span></p>
     </div>
   </div>
 

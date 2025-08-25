@@ -253,46 +253,50 @@ function addUserTicketsFor(raffleId, n) {
 
 // demo past data for account page
 const demoPast = [
-  { title: 'PS5 Bundle', spent: 4, won: false },
-  { title: '£100 Gift Card', spent: 2, won: true, prize: 100 }
+  { title: 'PS5 Bundle', spent: 4, won: false, image: 'images/gamingsetup.png' },
+  { title: '£100 Gift Card', spent: 2, won: true, prize: 100, image: 'images/spaweekend.png' }
 ];
 
-function renderAccount() {
-  const balEl = $('#userBalance');
+function renderProfile() {
+  const balEl = $('#modalBalance');
   if (!balEl) return;
   balEl.textContent = getBalance().toFixed(2);
 
-  const currentList = $('#userCurrentEntries');
+  const currentList = $('#modalCurrentEntries');
   currentList.innerHTML = '';
   raffles.forEach(r => {
     const t = getUserTicketsFor(r.id);
     if (t > 0) {
-      const li = document.createElement('li');
-      li.textContent = `${r.title} — ${t} tickets`;
-      currentList.appendChild(li);
+      const card = document.createElement('div');
+      card.className = 'profile-card';
+      card.innerHTML = `<img src="${r.image}" alt="${r.title}"><div class="info"><h4>${r.title}</h4><div class="tickets">${t} ticket${t>1?'s':''}</div></div>`;
+      currentList.appendChild(card);
     }
   });
 
-  const pastList = $('#userPastRaffles');
+  const pastList = $('#modalPastRaffles');
   pastList.innerHTML = '';
   demoPast.forEach(r => {
-    const li = document.createElement('li');
-    li.textContent = `${r.title} — ${r.won ? `Won £${r.prize}` : 'Lost'} (spent £${r.spent})`;
-    pastList.appendChild(li);
+    const card = document.createElement('div');
+    card.className = 'profile-card';
+    const status = r.won ? `Won £${r.prize}` : 'Lost';
+    card.innerHTML = `<img src="${r.image}" alt="${r.title}"><div class="info"><h4>${r.title}</h4><div class="tickets">${status} (spent £${r.spent})</div></div>`;
+    pastList.appendChild(card);
   });
 
-  const wonList = $('#userWonRaffles');
+  const wonList = $('#modalWonRaffles');
   wonList.innerHTML = '';
   demoPast.filter(r => r.won).forEach(r => {
-    const li = document.createElement('li');
-    li.textContent = `${r.title} — £${r.prize}`;
-    wonList.appendChild(li);
+    const card = document.createElement('div');
+    card.className = 'profile-card';
+    card.innerHTML = `<img src="${r.image}" alt="${r.title}"><div class="info"><h4>${r.title}</h4><div class="tickets">£${r.prize}</div></div>`;
+    wonList.appendChild(card);
   });
 
   const spent = getSpent() + demoPast.reduce((s, r) => s + r.spent, 0);
   const wonAmt = demoPast.filter(r => r.won).reduce((s, r) => s + (r.prize || 0), 0);
-  $('#userSpent').textContent = spent.toFixed(2);
-  $('#userWon').textContent = wonAmt.toFixed(2);
+  $('#modalSpent').textContent = spent.toFixed(2);
+  $('#modalWon').textContent = wonAmt.toFixed(2);
 }
 
 function completeEntry() {
@@ -338,16 +342,16 @@ function completeEntry() {
   renderTop3();
   filterRaffles();
   renderBigRaffles();
-  renderAccount();
+  renderProfile();
 }
 
 /* ====== EVENTS ====== */
 document.addEventListener('DOMContentLoaded', () => {
   // Auth setup
   const loginLink = $('#loginLink');
-  const accountNav = $('#accountNav');
+  const profileBtn = $('#profileBtn');
   if (isLoggedIn()) {
-    accountNav.style.display = 'block';
+    profileBtn.style.display = 'inline-block';
     loginLink.textContent = 'Logout';
     loginLink.removeAttribute('href');
     loginLink.addEventListener('click', (e) => {
@@ -355,10 +359,14 @@ document.addEventListener('DOMContentLoaded', () => {
       ['rr_logged_in','rr_username','rr_balance','rr_spent'].forEach(k => localStorage.removeItem(k));
       window.location.href = 'index.html';
     });
-    renderAccount();
+    renderProfile();
   } else {
-    accountNav.style.display = 'none';
+    profileBtn.style.display = 'none';
   }
+  profileBtn.addEventListener('click', () => {
+    renderProfile();
+    $('#profileModal').style.display = 'flex';
+  });
 
   // Mobile nav
   $('#mobileMenu').addEventListener('click', () => {
