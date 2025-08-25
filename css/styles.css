@@ -244,10 +244,10 @@ body.light-mode {
 .hall-of-fame { margin-top:2rem; }
 .fame-grid { display:flex; justify-content:center; align-items:flex-end; gap:1rem; }
 .fame-card { flex:1; background:var(--card-bg); border:1px solid rgba(127,23,52,.2); border-radius:12px 12px 0 0; padding:1rem; text-align:center; position:relative; }
-.fame-card::after { content:""; position:absolute; left:0; right:0; bottom:-20px; height:20px; background:var(--card-bg); border:1px solid rgba(127,23,52,.2); border-top:none; border-radius:0 0 12px 12px; }
-.fame-card:nth-child(2)::after { height:40px; bottom:-40px; }
-.fame-card:nth-child(1)::after,
-.fame-card:nth-child(3)::after { height:30px; bottom:-30px; }
+.fame-card img { width:100%; height:120px; object-fit:cover; border-radius:8px; margin-bottom:.5rem; }
+.fame-card .pos { position:absolute; top:-25px; left:50%; transform:translateX(-50%); background:var(--claret); color:#fff; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; }
+.fame-card:nth-child(2) { transform:translateY(-20px); }
+.fame-card:nth-child(1) { transform:translateY(-10px); }
 .fame-card h3 { font-family:'Kanit',sans-serif; margin-bottom:.5rem; }
 .fame-card p { color:var(--text-muted); font-size:.9rem; }
 
