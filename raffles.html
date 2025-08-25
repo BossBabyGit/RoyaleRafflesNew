@@ -17,6 +17,7 @@
         <li><a href="index.html" class="nav-link">Home</a></li>
         <li><a href="raffles.html" class="nav-link">All Raffles</a></li>
         <li><a href="lastwinners.html" class="nav-link">Past Winners</a></li>
+        <li><a href="index.html#faq" class="nav-link">FAQ</a></li>
         <li><button id="profileBtn" class="button button-outline" style="display:none;">Profile</button></li>
         <li><a id="loginLink" class="button button-outline" href="login.html">Login</a></li>
       </ul>
@@ -106,7 +107,13 @@
         <h2>My Profile</h2>
         <button class="close-modal" data-close>×</button>
       </div>
+      <p><strong>User:</strong> <span id="modalUsername"></span></p>
+      <p><strong>Email:</strong> <span id="modalEmail"></span></p>
       <p>Balance: £<span id="modalBalance">0.00</span></p>
+      <div class="top-up">
+        <input type="number" id="topUpAmount" placeholder="Add funds" min="1">
+        <button id="topUpBtn" class="button button-outline">Top Up</button>
+      </div>
       <h3>Current Entries</h3>
       <div id="modalCurrentEntries" class="profile-grid"></div>
       <h3>Past Raffles</h3>

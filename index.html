@@ -116,6 +116,12 @@
           </div>
         </section>
 
+        <!-- FAQ -->
+        <section id="faq" class="section faq">
+          <h2>FAQ</h2>
+          <div id="faqItems"></div>
+        </section>
+
       </section>
 
     </div>
@@ -172,7 +178,13 @@
         <h2>My Profile</h2>
         <button class="close-modal" data-close>×</button>
       </div>
+      <p><strong>User:</strong> <span id="modalUsername"></span></p>
+      <p><strong>Email:</strong> <span id="modalEmail"></span></p>
       <p>Balance: £<span id="modalBalance">0.00</span></p>
+      <div class="top-up">
+        <input type="number" id="topUpAmount" placeholder="Add funds" min="1">
+        <button id="topUpBtn" class="button button-outline">Top Up</button>
+      </div>
       <h3>Current Entries</h3>
       <div id="modalCurrentEntries" class="profile-grid"></div>
       <h3>Past Raffles</h3>

@@ -51,11 +51,11 @@ const raffles = [
 ];
 
 const winners = [
-  { name: "Sarah Miles", prize: "iPhone 15 Pro", value: 1200, chance: 5, date: "2024-06-15", icon: "🎉" },
-  { name: "James Tully", prize: "BMW M3", value: 70000, chance: 0.5, date: "2024-06-08", icon: "🚗" },
-  { name: "Emma Lane", prize: "Diamond Necklace", value: 5000, chance: 1, date: "2024-06-02", icon: "💎" },
-  { name: "Ryan King", prize: "PS5 + Games", value: 600, chance: 10, date: "2024-05-28", icon: "🎮" },
-  { name: "Sarah Miles", prize: "£100 Gift Card", value: 100, chance: 20, date: "2024-05-15", icon: "💷" }
+  { name: "Sarah Miles", prize: "iPhone 15 Pro", value: 1200, chance: 5, date: "2024-06-15", image: "images/iphone17.png" },
+  { name: "James Tully", prize: "BMW M3", value: 70000, chance: 0.5, date: "2024-06-08", image: "images/bmwm3.png" },
+  { name: "Emma Lane", prize: "Diamond Necklace", value: 5000, chance: 1, date: "2024-06-02", image: "images/rolex.png" },
+  { name: "Ryan King", prize: "PS5 + Games", value: 600, chance: 10, date: "2024-05-28", image: "images/gamingsetup.png" },
+  { name: "Sarah Miles", prize: "£100 Gift Card", value: 100, chance: 20, date: "2024-05-15", image: "images/spaweekend.png" }
 ];
 
 function maskName(name) {
@@ -171,7 +171,7 @@ function renderWinners() {
     const card = document.createElement('div');
     card.className = 'winner-card';
     card.innerHTML = `
-      <div class="winner-image">${w.icon}</div>
+      <img src="${w.image}" alt="${w.prize}" class="winner-image">
       <h3>${maskName(w.name)}</h3>
       <p><strong>Won:</strong> ${w.prize} (£${w.value})</p>
       <small>Chance: ${w.chance}% | ${new Date(w.date).toLocaleDateString()}</small>
@@ -225,7 +225,7 @@ function renderUrgentPopup() {
   const soon = raffles.filter(r => {
     const remaining = r.totalTickets - r.soldTickets;
     const timeLeft = r.endTime - new Date();
-    return remaining / r.totalTickets < 0.1 || timeLeft < 2 * 60 * 60 * 1000;
+    return remaining / r.totalTickets < 0.2 || timeLeft < 12 * 60 * 60 * 1000;
   });
   if (soon.length === 0) return;
   popup.innerHTML = `<h4>Ending Soon</h4><ul>${soon.map(r => `<li>${r.title}</li>`).join('')}</ul>`;
@@ -305,6 +305,8 @@ const demoPast = [
 function renderProfile() {
   const balEl = $('#modalBalance');
   if (!balEl) return;
+  $('#modalUsername').textContent = getUsername();
+  $('#modalEmail').textContent = localStorage.getItem('rr_email') || '—';
   balEl.textContent = getBalance().toFixed(2);
 
   const currentList = $('#modalCurrentEntries');
@@ -458,6 +460,18 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.classList.add('selected');
     });
   });
+
+  const topUpBtn = $('#topUpBtn');
+  if (topUpBtn) {
+    topUpBtn.addEventListener('click', () => {
+      const amt = parseFloat($('#topUpAmount').value);
+      if (!isNaN(amt) && amt > 0) {
+        setBalance(getBalance() + amt);
+        $('#topUpAmount').value = '';
+        renderProfile();
+      }
+    });
+  }
 
   document.body.addEventListener('click', (e) => {
     const enterId = e.target.getAttribute('data-enter');
