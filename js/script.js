@@ -233,15 +233,34 @@ function renderUrgentPopup() {
 }
 
 function renderHallOfFame() {
-  const bigEl = $('#fameBiggest');
-  if (!bigEl) return;
+  const topEl = $('#fameTop');
+  if (!topEl) return;
   const biggest = winners.reduce((max, w) => w.value > max.value ? w : max, winners[0]);
   const luckiest = winners.reduce((min, w) => w.chance < min.chance ? w : min, winners[0]);
   const counts = winners.reduce((map, w) => { map[w.name] = (map[w.name] || 0) + 1; return map; }, {});
   const topName = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
-  bigEl.innerHTML = `<h3>Biggest Win</h3><p>${maskName(biggest.name)} won ${biggest.prize} (£${biggest.value})</p>`;
-  $('#fameLuckiest').innerHTML = `<h3>Luckiest Player</h3><p>${maskName(luckiest.name)} won with ${luckiest.chance}% chance</p>`;
-  $('#fameTop').innerHTML = `<h3>Top Winner</h3><p>${maskName(topName)} has ${counts[topName]} win${counts[topName] > 1 ? 's' : ''}</p>`;
+  const topEntry = [...winners].reverse().find(w => w.name === topName);
+
+  $('#fameLuckiest').innerHTML = `
+    <div class="pos">2</div>
+    <img src="${luckiest.image}" alt="${luckiest.prize}" class="fame-image">
+    <h3>Luckiest Player</h3>
+    <p>${maskName(luckiest.name)} won with ${luckiest.chance}% chance</p>
+  `;
+
+  topEl.innerHTML = `
+    <div class="pos">1</div>
+    <img src="${topEntry.image}" alt="${topEntry.prize}" class="fame-image">
+    <h3>Top Winner</h3>
+    <p>${maskName(topName)} has ${counts[topName]} win${counts[topName] > 1 ? 's' : ''}</p>
+  `;
+
+  $('#fameBiggest').innerHTML = `
+    <div class="pos">3</div>
+    <img src="${biggest.image}" alt="${biggest.prize}" class="fame-image">
+    <h3>Biggest Win</h3>
+    <p>${maskName(biggest.name)} won ${biggest.prize} (£${biggest.value})</p>
+  `;
 }
 
 /* ====== ENTRY MODAL + RULES ====== */
