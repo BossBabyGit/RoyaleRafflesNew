@@ -425,7 +425,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!isLoggedIn()) { window.location.href = 'login.html'; return; }
       openModal(Number(enterId));
     }
-    if (e.target.hasAttribute('data-close')) closeModals();
+    if (e.target.closest('[data-close]')) {
+      closeModals();
+    }
   });
   window.addEventListener('click', (e) => {
     if (e.target.classList.contains('modal')) closeModals();
