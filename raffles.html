@@ -3,25 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Royal Raffles UK — Win Amazing Prizes!</title>
+  <title>Royal Raffles UK — All Raffles</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700&family=Kanit:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css"/>
 </head>
 <body>
-  <!-- Header -->
   <header class="header">
     <nav class="nav">
-      <div class="logo">
-        <span class="crown">👑</span>
-        Royal Raffles UK
-      </div>
+      <div class="logo"><span class="crown">👑</span>Royal Raffles UK</div>
       <ul class="nav-links" id="navLinks">
-        <li><a href="index.html" class="nav-link active">Home</a></li>
+        <li><a href="index.html" class="nav-link">Home</a></li>
         <li><a href="raffles.html" class="nav-link">All Raffles</a></li>
         <li><a href="lastwinners.html" class="nav-link">Past Winners</a></li>
-        <li><a href="#faq" class="nav-link">FAQ</a></li>
         <li><button id="profileBtn" class="button button-outline" style="display:none;">Profile</button></li>
         <li><a id="loginLink" class="button button-outline" href="login.html">Login</a></li>
       </ul>
@@ -32,94 +27,33 @@
     </nav>
   </header>
 
-  <!-- Main -->
   <main class="main">
     <div class="container">
-
-      <!-- Home -->
-      <section id="home" class="page active">
-
-        <!-- HERO -->
-        <section class="hero">
-          <div class="hero-content">
-            <div class="hero-badge">🏆 UK's Most Trusted Raffle Platform</div>
-            <h1>Win <span class="highlight">Luxury Prizes</span> from £2</h1>
-            <p>Join thousands of winners. Cars, tech, cash & more — your dream prize is just a ticket away.</p>
-
-            <div class="hero-stats">
-              <div class="stat">
-                <span class="stat-number">£2M+</span>
-                <span class="stat-label">Prizes Won</span>
-              </div>
-              <div class="stat">
-                <span class="stat-number">15K+</span>
-                <span class="stat-label">Winners</span>
-              </div>
-              <div class="stat">
-                <span class="stat-number">100%</span>
-                <span class="stat-label">Provably Fair</span>
-              </div>
-            </div>
-
-            <div class="hero-buttons">
-              <a class="button button-primary" href="raffles.html">Browse All</a>
-              <a class="button button-ghost" href="#how-it-works">How It Works</a>
-            </div>
-          </div>
-
-          <div class="hero-visual">
-            <div class="orbit">
-              <div class="glow-dot"></div>
-              <div class="glow-dot delay1"></div>
-              <div class="glow-dot delay2"></div>
-            </div>
-            <img src="images/luxury.png" alt="Luxury prizes" class="hero-image"/>
-            <div class="confetti"></div>
-          </div>
-        </section>
-
-        <!-- TOP 3 -->
-        <section class="section">
-          <div class="section-head">
-            <h2>Top Raffles</h2>
-            <div class="section-actions">
-              <button class="chip is-active" data-top="popular">Popular</button>
-              <button class="chip" data-top="ending">Ending Soon</button>
-            </div>
-          </div>
-          <div class="raffles-grid" id="topRafflesGrid"></div>
-
-          <div class="center mt-lg">
-            <a class="button button-gradient" href="raffles.html">See Big Raffles</a>
-          </div>
-        </section>
-
-        <!-- HOW IT WORKS (quick explainer) -->
-        <section id="how-it-works" class="how-it-works">
-          <h2>How the raffles work</h2>
-          <div class="steps">
-            <div class="step">
-              <div class="step-num">1</div>
-              <h3>Pick a raffle</h3>
-              <p>Choose any live raffle and select your number of tickets.</p>
-            </div>
-            <div class="step">
-              <div class="step-num">2</div>
-              <h3>Ticket limits</h3>
-              <p>Each user can buy up to <strong>50% of total tickets</strong> for a raffle — keeping things fair.</p>
-            </div>
-            <div class="step">
-              <div class="step-num">3</div>
-              <h3>Fair draws</h3>
-              <p>When the timer ends or tickets sell out, a winner is auto-drawn using a <strong>random.org</strong> bot and verified.</p>
-            </div>
-          </div>
-        </section>
-
+      <section class="section">
+        <h1>All Raffles</h1>
+        <div class="filters">
+          <select id="categoryFilter">
+            <option value="">All Categories</option>
+            <option value="electronics">Electronics</option>
+            <option value="fashion">Fashion</option>
+            <option value="cars">Cars</option>
+          </select>
+          <select id="sortFilter">
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+            <option value="price_low">Entry Price ↑</option>
+            <option value="price_high">Entry Price ↓</option>
+            <option value="value_high">Prize Value ↓</option>
+            <option value="value_low">Prize Value ↑</option>
+          </select>
+          <input type="text" id="searchInput" placeholder="Search raffles..."/>
+        </div>
+        <div id="currentRafflesGrid" class="raffles-grid"></div>
       </section>
-
     </div>
   </main>
+
+  <div id="urgentPopup" class="urgent-popup"></div>
 
   <!-- Entry Modal -->
   <div id="entryModal" class="modal">

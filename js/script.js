@@ -4,6 +4,7 @@ const raffles = [
     id: 1,
     title: "iPhone 15 Pro Max - 256GB",
     price: 2.00,
+    value: 1200,
     image: "images/iphone17.png",
     category: "electronics",
     totalTickets: 1000,
@@ -15,6 +16,7 @@ const raffles = [
     id: 2,
     title: "Designer Handbag",
     price: 2.00,
+    value: 1800,
     image: "images/designerhandbag.png",
     category: "fashion",
     totalTickets: 500,
@@ -26,6 +28,7 @@ const raffles = [
     id: 3,
     title: "BMW M3 - 2024 Model",
     price: 2.00,
+    value: 70000,
     image: "images/bmwm3.png",
     category: "cars",
     totalTickets: 5000,
@@ -37,6 +40,7 @@ const raffles = [
     id: 4,
     title: "Ultimate Gaming PC + 49\" UltraWide",
     price: 2.00,
+    value: 4500,
     image: "images/gamingsetup.png",
     category: "electronics",
     totalTickets: 2500,
@@ -47,11 +51,21 @@ const raffles = [
 ];
 
 const winners = [
-  { name: "Sarah M.", prize: "iPhone 15 Pro", date: "2024-06-15", icon: "🎉" },
-  { name: "James T.", prize: "BMW M3", date: "2024-06-08", icon: "🚗" },
-  { name: "Emma L.", prize: "Diamond Necklace", date: "2024-06-02", icon: "💎" },
-  { name: "Ryan K.", prize: "PS5 + Games", date: "2024-05-28", icon: "🎮" }
+  { name: "Sarah Miles", prize: "iPhone 15 Pro", value: 1200, chance: 5, date: "2024-06-15", icon: "🎉" },
+  { name: "James Tully", prize: "BMW M3", value: 70000, chance: 0.5, date: "2024-06-08", icon: "🚗" },
+  { name: "Emma Lane", prize: "Diamond Necklace", value: 5000, chance: 1, date: "2024-06-02", icon: "💎" },
+  { name: "Ryan King", prize: "PS5 + Games", value: 600, chance: 10, date: "2024-05-28", icon: "🎮" },
+  { name: "Sarah Miles", prize: "£100 Gift Card", value: 100, chance: 20, date: "2024-05-15", icon: "💷" }
 ];
+
+function maskName(name) {
+  if (!name) return '';
+  const parts = name.split(' ');
+  const first = parts[0];
+  const maskedFirst = first[0] + first.slice(1, -1).replace(/./g, '*') + first.slice(-1);
+  const last = parts[1] ? ` ${parts[1][0]}.` : '';
+  return maskedFirst + last;
+}
 
 const faq = [
   { q: "How do the raffles work?", a: "Pick a raffle, select tickets (£2 each), and enter. When it ends, we draw a winner randomly and notify them immediately." },
@@ -158,9 +172,9 @@ function renderWinners() {
     card.className = 'winner-card';
     card.innerHTML = `
       <div class="winner-image">${w.icon}</div>
-      <h3>${w.name}</h3>
-      <p><strong>Won:</strong> ${w.prize}</p>
-      <small>Won on: ${new Date(w.date).toLocaleDateString()}</small>
+      <h3>${maskName(w.name)}</h3>
+      <p><strong>Won:</strong> ${w.prize} (£${w.value})</p>
+      <small>Chance: ${w.chance}% | ${new Date(w.date).toLocaleDateString()}</small>
     `;
     grid.appendChild(card);
   });
@@ -179,24 +193,55 @@ function renderFAQ() {
 
 /* ====== FILTERS (All Raffles) ====== */
 function attachFilters() {
-  $('#categoryFilter').addEventListener('change', filterRaffles);
-  $('#sortFilter').addEventListener('change', filterRaffles);
-  $('#searchInput').addEventListener('input', filterRaffles);
+  const cat = $('#categoryFilter');
+  const sort = $('#sortFilter');
+  const search = $('#searchInput');
+  if (cat) cat.addEventListener('change', filterRaffles);
+  if (sort) sort.addEventListener('change', filterRaffles);
+  if (search) search.addEventListener('input', filterRaffles);
 }
 function filterRaffles() {
-  const category = $('#categoryFilter').value;
-  const sort = $('#sortFilter').value;
-  const search = $('#searchInput').value.toLowerCase();
+  if (!$('#currentRafflesGrid')) return;
+  const category = $('#categoryFilter') ? $('#categoryFilter').value : '';
+  const sort = $('#sortFilter') ? $('#sortFilter').value : 'newest';
+  const search = $('#searchInput') ? $('#searchInput').value.toLowerCase() : '';
   let filtered = raffles.filter(r => (!category || r.category === category) && r.title.toLowerCase().includes(search));
   switch (sort) {
-    case 'popular': filtered.sort((a,b) => (b.soldTickets/b.totalTickets) - (a.soldTickets/a.totalTickets)); break;
-    case 'ending': filtered.sort((a,b) => a.endTime - b.endTime); break;
-    case 'new': filtered.sort((a,b) => b.id - a.id); break;
-    case 'price': filtered.sort((a,b) => a.price - b.price); break;
+    case 'price_low': filtered.sort((a,b) => a.price - b.price); break;
+    case 'price_high': filtered.sort((a,b) => b.price - a.price); break;
+    case 'value_high': filtered.sort((a,b) => b.value - a.value); break;
+    case 'value_low': filtered.sort((a,b) => a.value - b.value); break;
+    case 'newest': filtered.sort((a,b) => b.id - a.id); break;
+    case 'oldest': filtered.sort((a,b) => a.id - b.id); break;
   }
   const grid = $('#currentRafflesGrid');
   grid.innerHTML = '';
   filtered.forEach(r => grid.appendChild(createRaffleCard(r)));
+}
+
+function renderUrgentPopup() {
+  const popup = $('#urgentPopup');
+  if (!popup) return;
+  const soon = raffles.filter(r => {
+    const remaining = r.totalTickets - r.soldTickets;
+    const timeLeft = r.endTime - new Date();
+    return remaining / r.totalTickets < 0.1 || timeLeft < 2 * 60 * 60 * 1000;
+  });
+  if (soon.length === 0) return;
+  popup.innerHTML = `<h4>Ending Soon</h4><ul>${soon.map(r => `<li>${r.title}</li>`).join('')}</ul>`;
+  popup.classList.add('active');
+}
+
+function renderHallOfFame() {
+  const bigEl = $('#fameBiggest');
+  if (!bigEl) return;
+  const biggest = winners.reduce((max, w) => w.value > max.value ? w : max, winners[0]);
+  const luckiest = winners.reduce((min, w) => w.chance < min.chance ? w : min, winners[0]);
+  const counts = winners.reduce((map, w) => { map[w.name] = (map[w.name] || 0) + 1; return map; }, {});
+  const topName = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+  bigEl.innerHTML = `<h3>Biggest Win</h3><p>${maskName(biggest.name)} won ${biggest.prize} (£${biggest.value})</p>`;
+  $('#fameLuckiest').innerHTML = `<h3>Luckiest Player</h3><p>${maskName(luckiest.name)} won with ${luckiest.chance}% chance</p>`;
+  $('#fameTop').innerHTML = `<h3>Top Winner</h3><p>${maskName(topName)} has ${counts[topName]} win${counts[topName] > 1 ? 's' : ''}</p>`;
 }
 
 /* ====== ENTRY MODAL + RULES ====== */
@@ -339,69 +384,66 @@ function completeEntry() {
   setTimeout(() => { $('#drawModal').style.display = 'none'; }, 1800);
 
   // Re-render cards to update progress
-  renderTop3();
-  filterRaffles();
-  renderBigRaffles();
-  renderProfile();
+  if ($('#topRafflesGrid')) renderTop3();
+  if ($('#currentRafflesGrid')) filterRaffles();
+  if ($('#bigRafflesGrid')) renderBigRaffles();
+  if ($('#modalBalance')) renderProfile();
 }
 
 /* ====== EVENTS ====== */
 document.addEventListener('DOMContentLoaded', () => {
-  // Auth setup
   const loginLink = $('#loginLink');
   const profileBtn = $('#profileBtn');
-  if (isLoggedIn()) {
-    profileBtn.style.display = 'inline-block';
-    loginLink.textContent = 'Logout';
-    loginLink.removeAttribute('href');
-    loginLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      ['rr_logged_in','rr_username','rr_balance','rr_spent'].forEach(k => localStorage.removeItem(k));
-      window.location.href = 'index.html';
+  if (loginLink && profileBtn) {
+    if (isLoggedIn()) {
+      profileBtn.style.display = 'inline-block';
+      loginLink.textContent = 'Logout';
+      loginLink.removeAttribute('href');
+      loginLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        ['rr_logged_in','rr_username','rr_balance','rr_spent'].forEach(k => localStorage.removeItem(k));
+        window.location.href = 'index.html';
+      });
+      renderProfile();
+    } else {
+      profileBtn.style.display = 'none';
+    }
+    profileBtn.addEventListener('click', () => {
+      renderProfile();
+      $('#profileModal').style.display = 'flex';
     });
-    renderProfile();
-  } else {
-    profileBtn.style.display = 'none';
   }
-  profileBtn.addEventListener('click', () => {
-    renderProfile();
-    $('#profileModal').style.display = 'flex';
-  });
 
-  // Mobile nav
-  $('#mobileMenu').addEventListener('click', () => {
-    $('#navLinks').classList.toggle('active');
-  });
+  if ($('#mobileMenu')) {
+    $('#mobileMenu').addEventListener('click', () => {
+      $('#navLinks').classList.toggle('active');
+    });
+  }
 
-  // Nav link clicks
   $$('.nav-link').forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      showPage(link.dataset.page);
-      $('#navLinks').classList.remove('active');
-    });
-  });
-  $$('[data-go]').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      showPage(btn.dataset.go);
-    });
+    if (link.dataset.page) {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        showPage(link.dataset.page);
+        $('#navLinks').classList.remove('active');
+      });
+    }
   });
 
-  // Theme toggle
   const themeToggle = $('#themeToggle');
-  const setTheme = (theme) => {
-    if (theme === 'light') { document.body.classList.add('light-mode'); themeToggle.textContent = '🌞'; }
-    else { document.body.classList.remove('light-mode'); themeToggle.textContent = '🌙'; }
-  };
-  const savedTheme = localStorage.getItem('theme') || 'dark';
-  setTheme(savedTheme);
-  themeToggle.addEventListener('click', () => {
-    const newTheme = document.body.classList.contains('light-mode') ? 'dark' : 'light';
-    setTheme(newTheme); localStorage.setItem('theme', newTheme);
-  });
+  if (themeToggle) {
+    const setTheme = (theme) => {
+      if (theme === 'light') { document.body.classList.add('light-mode'); themeToggle.textContent = '🌞'; }
+      else { document.body.classList.remove('light-mode'); themeToggle.textContent = '🌙'; }
+    };
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+    themeToggle.addEventListener('click', () => {
+      const newTheme = document.body.classList.contains('light-mode') ? 'dark' : 'light';
+      setTheme(newTheme); localStorage.setItem('theme', newTheme);
+    });
+  }
 
-  // Chips for Top 3
   $$('.chip').forEach(chip => {
     chip.addEventListener('click', () => {
       $$('.chip').forEach(c => c.classList.remove('is-active'));
@@ -410,7 +452,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Payment method select
   $$('.payment-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       $$('.payment-btn').forEach(b => b.classList.remove('selected'));
@@ -418,7 +459,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Modal controls
   document.body.addEventListener('click', (e) => {
     const enterId = e.target.getAttribute('data-enter');
     if (enterId) {
@@ -433,16 +473,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target.classList.contains('modal')) closeModals();
   });
 
-  // Ticket controls
-  $$('.ticket-btn').forEach(btn => btn.addEventListener('click', () => changeTickets(Number(btn.dataset.delta))));
-  $('#ticketCount').addEventListener('input', updateTotal);
-  $('#completeEntry').addEventListener('click', completeEntry);
+  if ($('#ticketCount')) {
+    $$('.ticket-btn').forEach(btn => btn.addEventListener('click', () => changeTickets(Number(btn.dataset.delta))));
+    $('#ticketCount').addEventListener('input', updateTotal);
+    $('#completeEntry').addEventListener('click', completeEntry);
+  }
 
-  // Initial renders
-  renderTop3();
-  renderAllRaffles();
-  renderBigRaffles();
-  renderWinners();
-  renderFAQ();
-  attachFilters();
+  if ($('#topRafflesGrid')) renderTop3();
+  if ($('#currentRafflesGrid')) {
+    renderAllRaffles();
+    filterRaffles();
+    attachFilters();
+    renderUrgentPopup();
+    setInterval(renderUrgentPopup, 60000);
+  }
+  if ($('#bigRafflesGrid')) renderBigRaffles();
+  if ($('#winnersGrid')) renderWinners();
+  if ($('#faqItems')) renderFAQ();
+  if ($('#hallOfFame')) renderHallOfFame();
 });
