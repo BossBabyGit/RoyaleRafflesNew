@@ -23,6 +23,7 @@
         <li><a href="#" class="nav-link" data-page="big-raffles">Big Raffles</a></li>
         <li><a href="#" class="nav-link" data-page="winners">Past Winners</a></li>
         <li><a href="#" class="nav-link" data-page="faq">FAQ</a></li>
+        <li id="accountNav" style="display:none;"><a href="#" class="nav-link" data-page="account">My Account</a></li>
         <li>
           <a id="loginLink" class="button button-outline" href="login.html">Login</a>
         </li>
@@ -118,6 +119,23 @@
           </div>
         </section>
 
+      </section>
+
+      <section id="account" class="page">
+        <h2>My Account</h2>
+        <p>Balance: £<span id="userBalance">0.00</span></p>
+
+        <h3>Current Entries</h3>
+        <ul id="userCurrentEntries"></ul>
+
+        <h3>Past Raffles</h3>
+        <ul id="userPastRaffles"></ul>
+
+        <h3>Won Raffles</h3>
+        <ul id="userWonRaffles"></ul>
+
+        <h3>Stats</h3>
+        <p>Spent: £<span id="userSpent">0.00</span> | Won: £<span id="userWon">0.00</span></p>
       </section>
     </div>
   </main>

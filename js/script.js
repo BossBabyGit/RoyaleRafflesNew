@@ -65,6 +65,23 @@ const faq = [
 const $ = (sel, root=document) => root.querySelector(sel);
 const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
 
+// simple auth helpers
+function isLoggedIn() {
+  return localStorage.getItem('rr_logged_in') === 'true';
+}
+function getBalance() {
+  return parseFloat(localStorage.getItem('rr_balance') || '0');
+}
+function setBalance(v) {
+  localStorage.setItem('rr_balance', v.toFixed(2));
+}
+function getSpent() {
+  return parseFloat(localStorage.getItem('rr_spent') || '0');
+}
+function addSpent(v) {
+  localStorage.setItem('rr_spent', (getSpent() + v).toFixed(2));
+}
+
 function showPage(pageId) {
   $$('.page').forEach(p => p.classList.remove('active'));
   $('#' + pageId).classList.add('active');
@@ -185,6 +202,7 @@ function filterRaffles() {
 /* ====== ENTRY MODAL + RULES ====== */
 let currentRaffleId = null;
 function openModal(raffleId) {
+  if (!isLoggedIn()) { window.location.href = 'login.html'; return; }
   const raffle = raffles.find(r => r.id === raffleId);
   if (!raffle) return;
   currentRaffleId = raffleId;
@@ -233,6 +251,50 @@ function addUserTicketsFor(raffleId, n) {
   localStorage.setItem(key, String(cur + n));
 }
 
+// demo past data for account page
+const demoPast = [
+  { title: 'PS5 Bundle', spent: 4, won: false },
+  { title: '£100 Gift Card', spent: 2, won: true, prize: 100 }
+];
+
+function renderAccount() {
+  const balEl = $('#userBalance');
+  if (!balEl) return;
+  balEl.textContent = getBalance().toFixed(2);
+
+  const currentList = $('#userCurrentEntries');
+  currentList.innerHTML = '';
+  raffles.forEach(r => {
+    const t = getUserTicketsFor(r.id);
+    if (t > 0) {
+      const li = document.createElement('li');
+      li.textContent = `${r.title} — ${t} tickets`;
+      currentList.appendChild(li);
+    }
+  });
+
+  const pastList = $('#userPastRaffles');
+  pastList.innerHTML = '';
+  demoPast.forEach(r => {
+    const li = document.createElement('li');
+    li.textContent = `${r.title} — ${r.won ? `Won £${r.prize}` : 'Lost'} (spent £${r.spent})`;
+    pastList.appendChild(li);
+  });
+
+  const wonList = $('#userWonRaffles');
+  wonList.innerHTML = '';
+  demoPast.filter(r => r.won).forEach(r => {
+    const li = document.createElement('li');
+    li.textContent = `${r.title} — £${r.prize}`;
+    wonList.appendChild(li);
+  });
+
+  const spent = getSpent() + demoPast.reduce((s, r) => s + r.spent, 0);
+  const wonAmt = demoPast.filter(r => r.won).reduce((s, r) => s + (r.prize || 0), 0);
+  $('#userSpent').textContent = spent.toFixed(2);
+  $('#userWon').textContent = wonAmt.toFixed(2);
+}
+
 function completeEntry() {
   const raffle = raffles.find(r => r.id === currentRaffleId);
   if (!raffle) return;
@@ -249,6 +311,12 @@ function completeEntry() {
     return;
   }
 
+  const cost = raffle.price * count;
+  if (getBalance() < cost) {
+    alert('Insufficient balance.');
+    return;
+  }
+
   // Payment method selected?
   const paySelected = $('.payment-btn.selected');
   if (!paySelected) {
@@ -259,6 +327,8 @@ function completeEntry() {
   // Simulate entry
   addUserTicketsFor(raffle.id, count);
   raffle.soldTickets = Math.min(raffle.totalTickets, raffle.soldTickets + count);
+  setBalance(getBalance() - cost);
+  addSpent(cost);
 
   closeModals();
   $('#drawModal').style.display = 'flex';
@@ -268,10 +338,28 @@ function completeEntry() {
   renderTop3();
   filterRaffles();
   renderBigRaffles();
+  renderAccount();
 }
 
 /* ====== EVENTS ====== */
 document.addEventListener('DOMContentLoaded', () => {
+  // Auth setup
+  const loginLink = $('#loginLink');
+  const accountNav = $('#accountNav');
+  if (isLoggedIn()) {
+    accountNav.style.display = 'block';
+    loginLink.textContent = 'Logout';
+    loginLink.removeAttribute('href');
+    loginLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      ['rr_logged_in','rr_username','rr_balance','rr_spent'].forEach(k => localStorage.removeItem(k));
+      window.location.href = 'index.html';
+    });
+    renderAccount();
+  } else {
+    accountNav.style.display = 'none';
+  }
+
   // Mobile nav
   $('#mobileMenu').addEventListener('click', () => {
     $('#navLinks').classList.toggle('active');
@@ -325,7 +413,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // Modal controls
   document.body.addEventListener('click', (e) => {
     const enterId = e.target.getAttribute('data-enter');
-    if (enterId) openModal(Number(enterId));
+    if (enterId) {
+      if (!isLoggedIn()) { window.location.href = 'login.html'; return; }
+      openModal(Number(enterId));
+    }
     if (e.target.hasAttribute('data-close')) closeModals();
   });
   window.addEventListener('click', (e) => {
