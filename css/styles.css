@@ -181,6 +181,7 @@ body.light-mode {
 /* Modal */
 .modal { display:none; position:fixed; inset:0; background: rgba(0,0,0,.8); z-index:2000; justify-content:center; align-items:center; }
 .modal-content { background: var(--card-bg); border:1px solid rgba(127,23,52,.3); border-radius:16px; width:min(520px, 92vw); max-height:90vh; overflow:auto; padding:1.4rem; position:relative; }
+#profileModal .modal-content { width:min(700px,95vw); }
 .modal-content::before { content:""; position:absolute; inset:0 0 auto 0; height:4px; background: linear-gradient(90deg, var(--claret), var(--blue)); }
 .modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; }
 .modal-header h2 { font-family:'Kanit',sans-serif; background: linear-gradient(90deg, var(--claret), var(--blue)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
@@ -220,6 +221,11 @@ body.light-mode {
 
 .top-up { margin:1rem 0; display:flex; gap:.5rem; }
 .top-up input { flex:1; padding:.5rem; border:1px solid rgba(127,23,52,.3); border-radius:8px; background:var(--darker-bg); color:var(--text-light); }
+.profile-details { display:flex; flex-wrap:wrap; gap:1rem; margin-bottom:1rem; }
+.profile-details > div { flex:1 1 140px; }
+.balance-display { font-size:1.1rem; font-weight:700; }
+.top-up-message { color:var(--blue); font-size:.9rem; margin-top:.4rem; opacity:0; transition:opacity .3s; }
+.top-up-message.show { opacity:1; }
 
 /* Winners & FAQ placeholders */
 .winners-gallery { display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.2rem; }

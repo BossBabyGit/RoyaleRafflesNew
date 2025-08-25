@@ -108,13 +108,16 @@
         <h2>My Profile</h2>
         <button class="close-modal" data-close>×</button>
       </div>
-      <p><strong>User:</strong> <span id="modalUsername"></span></p>
-      <p><strong>Email:</strong> <span id="modalEmail"></span></p>
-      <p>Balance: £<span id="modalBalance">0.00</span></p>
+      <div class="profile-details">
+        <div><strong>User:</strong> <span id="modalUsername"></span></div>
+        <div><strong>Email:</strong> <span id="modalEmail"></span></div>
+        <div class="balance-display"><strong>Balance:</strong> £<span id="modalBalance">0.00</span></div>
+      </div>
       <div class="top-up">
-        <input type="number" id="topUpAmount" placeholder="Add funds" min="1">
+        <input type="number" id="topUpAmount" placeholder="Add funds" min="1" step="0.01">
         <button id="topUpBtn" class="button button-outline">Top Up</button>
       </div>
+      <div id="topUpMessage" class="top-up-message"></div>
       <h3>Current Entries</h3>
       <div id="modalCurrentEntries" class="profile-grid"></div>
       <h3>Past Raffles</h3>
