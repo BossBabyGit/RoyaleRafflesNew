@@ -220,8 +220,8 @@ function openModal(raffleId) {
   $('#entryModal').style.display = 'flex';
 }
 function closeModals() {
-  $('#entryModal').style.display = 'none';
-  $('#drawModal').style.display = 'none';
+  // Hide any open modal
+  $$('.modal').forEach(m => (m.style.display = 'none'));
 }
 function updateTotal() {
   const raffle = raffles.find(r => r.id === currentRaffleId);
