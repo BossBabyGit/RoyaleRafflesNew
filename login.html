@@ -17,6 +17,10 @@
             <input id="username" type="text" placeholder="Username" required />
           </div>
           <div class="input-group">
+            <span class="input-icon">✉️</span>
+            <input id="email" type="email" placeholder="Email" required />
+          </div>
+          <div class="input-group">
             <span class="input-icon">🔒</span>
             <input id="password" type="password" placeholder="Password" required />
           </div>
@@ -27,16 +31,18 @@
   </main>
 
   <script>
-    document.getElementById('loginForm').addEventListener('submit', function(e){
-      e.preventDefault();
-      const username = document.getElementById('username').value.trim() || 'user';
-      localStorage.setItem('rr_logged_in', 'true');
-      localStorage.setItem('rr_username', username);
-      if (!localStorage.getItem('rr_balance')) {
-        localStorage.setItem('rr_balance', '100');
-      }
-      if (!localStorage.getItem('rr_spent')) {
-        localStorage.setItem('rr_spent', '0');
+      document.getElementById('loginForm').addEventListener('submit', function(e){
+        e.preventDefault();
+        const username = document.getElementById('username').value.trim() || 'user';
+        const email = document.getElementById('email').value.trim();
+        localStorage.setItem('rr_logged_in', 'true');
+        localStorage.setItem('rr_username', username);
+        localStorage.setItem('rr_email', email);
+        if (!localStorage.getItem('rr_balance')) {
+          localStorage.setItem('rr_balance', '100');
+        }
+        if (!localStorage.getItem('rr_spent')) {
+          localStorage.setItem('rr_spent', '0');
       }
       window.location.href = 'index.html';
     });
