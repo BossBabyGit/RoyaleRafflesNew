@@ -199,10 +199,24 @@ body.light-mode {
 .checkmark { font-size:3.2rem; color: var(--success); margin-bottom:.5rem; }
 
 /* Auth */
-.auth-card { max-width:420px; margin:4rem auto; background:var(--card-bg); padding:2rem; border-radius:16px; border:1px solid rgba(127,23,52,.3); }
+.auth-page .main { min-height:100vh; display:flex; justify-content:center; align-items:center; margin-top:0; padding:0; }
+.auth-card { max-width:420px; width:100%; margin:0; background:var(--card-bg); padding:2rem; border-radius:16px; border:1px solid rgba(127,23,52,.3); position:relative; box-shadow:0 16px 40px rgba(0,0,0,.35); }
+.auth-card::before { content:""; position:absolute; inset:0 0 auto 0; height:4px; background:linear-gradient(90deg,var(--claret),var(--blue)); border-top-left-radius:16px; border-top-right-radius:16px; }
+.auth-card h2 { text-align:center; margin-bottom:1.2rem; background:linear-gradient(90deg,var(--claret),var(--blue)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
 .login-form { display:flex; flex-direction:column; gap:1rem; }
-.login-form input { padding:.8rem 1rem; border-radius:8px; border:1px solid rgba(127,23,52,.3); background:var(--darker-bg); color:var(--text-light); }
+.input-group { display:flex; align-items:center; border:1px solid rgba(127,23,52,.3); border-radius:8px; background:var(--darker-bg); }
+.input-icon { padding:0 .8rem; color:var(--text-muted); }
+.input-group input { flex:1; padding:.8rem 1rem; background:transparent; border:0; color:var(--text-light); }
+.input-group input:focus { outline:none; }
 .login-form button { width:100%; }
+
+/* Profile */
+.profile-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(140px,1fr)); gap:1rem; margin-bottom:1rem; }
+.profile-card { background:var(--darker-bg); border:1px solid rgba(127,23,52,.3); border-radius:12px; overflow:hidden; }
+.profile-card img { width:100%; height:90px; object-fit:cover; }
+.profile-card .info { padding:.5rem .6rem; }
+.profile-card h4 { font-size:.95rem; margin-bottom:.2rem; }
+.profile-card .tickets { color:var(--text-muted); font-size:.85rem; margin-top:.3rem; }
 
 /* Winners & FAQ placeholders */
 .winners-gallery { display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.2rem; }

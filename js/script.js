@@ -253,8 +253,8 @@ function addUserTicketsFor(raffleId, n) {
 
 // demo past data for account page
 const demoPast = [
-  { title: 'PS5 Bundle', spent: 4, won: false },
-  { title: '£100 Gift Card', spent: 2, won: true, prize: 100 }
+  { title: 'PS5 Bundle', spent: 4, won: false, image: 'images/gamingsetup.png' },
+  { title: '£100 Gift Card', spent: 2, won: true, prize: 100, image: 'images/spaweekend.png' }
 ];
 
 function renderProfile() {
@@ -267,26 +267,30 @@ function renderProfile() {
   raffles.forEach(r => {
     const t = getUserTicketsFor(r.id);
     if (t > 0) {
-      const li = document.createElement('li');
-      li.textContent = `${r.title} — ${t} tickets`;
-      currentList.appendChild(li);
+      const card = document.createElement('div');
+      card.className = 'profile-card';
+      card.innerHTML = `<img src="${r.image}" alt="${r.title}"><div class="info"><h4>${r.title}</h4><div class="tickets">${t} ticket${t>1?'s':''}</div></div>`;
+      currentList.appendChild(card);
     }
   });
 
   const pastList = $('#modalPastRaffles');
   pastList.innerHTML = '';
   demoPast.forEach(r => {
-    const li = document.createElement('li');
-    li.textContent = `${r.title} — ${r.won ? `Won £${r.prize}` : 'Lost'} (spent £${r.spent})`;
-    pastList.appendChild(li);
+    const card = document.createElement('div');
+    card.className = 'profile-card';
+    const status = r.won ? `Won £${r.prize}` : 'Lost';
+    card.innerHTML = `<img src="${r.image}" alt="${r.title}"><div class="info"><h4>${r.title}</h4><div class="tickets">${status} (spent £${r.spent})</div></div>`;
+    pastList.appendChild(card);
   });
 
   const wonList = $('#modalWonRaffles');
   wonList.innerHTML = '';
   demoPast.filter(r => r.won).forEach(r => {
-    const li = document.createElement('li');
-    li.textContent = `${r.title} — £${r.prize}`;
-    wonList.appendChild(li);
+    const card = document.createElement('div');
+    card.className = 'profile-card';
+    card.innerHTML = `<img src="${r.image}" alt="${r.title}"><div class="info"><h4>${r.title}</h4><div class="tickets">£${r.prize}</div></div>`;
+    wonList.appendChild(card);
   });
 
   const spent = getSpent() + demoPast.reduce((s, r) => s + r.spent, 0);
