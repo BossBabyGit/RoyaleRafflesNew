@@ -257,12 +257,12 @@ const demoPast = [
   { title: '£100 Gift Card', spent: 2, won: true, prize: 100 }
 ];
 
-function renderAccount() {
-  const balEl = $('#userBalance');
+function renderProfile() {
+  const balEl = $('#modalBalance');
   if (!balEl) return;
   balEl.textContent = getBalance().toFixed(2);
 
-  const currentList = $('#userCurrentEntries');
+  const currentList = $('#modalCurrentEntries');
   currentList.innerHTML = '';
   raffles.forEach(r => {
     const t = getUserTicketsFor(r.id);
@@ -273,7 +273,7 @@ function renderAccount() {
     }
   });
 
-  const pastList = $('#userPastRaffles');
+  const pastList = $('#modalPastRaffles');
   pastList.innerHTML = '';
   demoPast.forEach(r => {
     const li = document.createElement('li');
@@ -281,7 +281,7 @@ function renderAccount() {
     pastList.appendChild(li);
   });
 
-  const wonList = $('#userWonRaffles');
+  const wonList = $('#modalWonRaffles');
   wonList.innerHTML = '';
   demoPast.filter(r => r.won).forEach(r => {
     const li = document.createElement('li');
@@ -291,8 +291,8 @@ function renderAccount() {
 
   const spent = getSpent() + demoPast.reduce((s, r) => s + r.spent, 0);
   const wonAmt = demoPast.filter(r => r.won).reduce((s, r) => s + (r.prize || 0), 0);
-  $('#userSpent').textContent = spent.toFixed(2);
-  $('#userWon').textContent = wonAmt.toFixed(2);
+  $('#modalSpent').textContent = spent.toFixed(2);
+  $('#modalWon').textContent = wonAmt.toFixed(2);
 }
 
 function completeEntry() {
@@ -338,16 +338,16 @@ function completeEntry() {
   renderTop3();
   filterRaffles();
   renderBigRaffles();
-  renderAccount();
+  renderProfile();
 }
 
 /* ====== EVENTS ====== */
 document.addEventListener('DOMContentLoaded', () => {
   // Auth setup
   const loginLink = $('#loginLink');
-  const accountNav = $('#accountNav');
+  const profileBtn = $('#profileBtn');
   if (isLoggedIn()) {
-    accountNav.style.display = 'block';
+    profileBtn.style.display = 'inline-block';
     loginLink.textContent = 'Logout';
     loginLink.removeAttribute('href');
     loginLink.addEventListener('click', (e) => {
@@ -355,10 +355,14 @@ document.addEventListener('DOMContentLoaded', () => {
       ['rr_logged_in','rr_username','rr_balance','rr_spent'].forEach(k => localStorage.removeItem(k));
       window.location.href = 'index.html';
     });
-    renderAccount();
+    renderProfile();
   } else {
-    accountNav.style.display = 'none';
+    profileBtn.style.display = 'none';
   }
+  profileBtn.addEventListener('click', () => {
+    renderProfile();
+    $('#profileModal').style.display = 'flex';
+  });
 
   // Mobile nav
   $('#mobileMenu').addEventListener('click', () => {
