@@ -17,12 +17,27 @@
 
 body {
   font-family: 'Oxanium', sans-serif;
-  background: radial-gradient(1200px 600px at 70% -10%, rgba(127,23,52,.18), transparent),
-              radial-gradient(1000px 500px at -10% 10%, rgba(0,85,165,.18), transparent),
-              var(--dark-bg);
+  background: var(--dark-bg);
   color: var(--text-light);
   min-height: 100vh;
   overflow-x: hidden;
+}
+
+.animated-background {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(1200px 600px at 70% -10%, rgba(127,23,52,.18), transparent),
+              radial-gradient(1000px 500px at -10% 10%, rgba(0,85,165,.18), transparent);
+  background-size: 200% 200%;
+  animation: gradientMove 30s ease-in-out infinite;
+  z-index: -1;
+  pointer-events: none;
+}
+
+@keyframes gradientMove {
+  0% { transform: translate3d(0,0,0); }
+  50% { transform: translate3d(-10%, -10%, 0); }
+  100% { transform: translate3d(0,0,0); }
 }
 
 body.light-mode {
