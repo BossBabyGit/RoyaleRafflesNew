@@ -6,10 +6,12 @@ import Home from './pages/Home.jsx';
 import Raffles from './pages/Raffles.jsx';
 import LastWinners from './pages/LastWinners.jsx';
 import Login from './pages/Login.jsx';
+import AnimatedBackground from './components/AnimatedBackground.jsx';
 
 export default function App() {
   return (
     <Router>
+      <AnimatedBackground />
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
